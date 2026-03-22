@@ -1,0 +1,17 @@
+[Unit]
+Description=RoboKaty Telegram Bot
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/robokaty
+ExecStart=/home/ubuntu/robokaty/robokaty
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
