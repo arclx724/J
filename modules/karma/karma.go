@@ -1,4 +1,7 @@
-// RoboKaty - Rose-style Telegram Group Manager Bot
+// * @author        Fake Aaru <arclx724@gmail.com>
+// * @date          2026-Mar-22
+// * @projectName   RoboKatyBot
+// * Copyright ©SlayWithRose All rights reserved
 // modules/karma/karma.go — FIXED (no broken goroutines)
 
 package karma

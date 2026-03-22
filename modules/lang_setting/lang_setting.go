@@ -1,4 +1,7 @@
-// RoboKaty - Rose-style Telegram Group Manager Bot
+// * @author        Fake Aaru <arclx724@gmail.com>
+// * @date          2026-Mar-22
+// * @projectName   RoboKatyBot
+// * Copyright ©SlayWithRose All rights reserved
 // Language selection for the bot (currently supports English only — extensible)
 
 package lang_setting
