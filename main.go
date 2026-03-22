@@ -1,7 +1,4 @@
-// * @author        Fake Aaru <arclx724@gmail.com>
-// * @date          2026-Mar-22
-// * @projectName   RoboKatyBot
-// * Copyright ©SlayWithRose All rights reserved
+// RoboKaty — main.go
 
 package main
 
