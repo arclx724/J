@@ -1,4 +1,7 @@
-// RoboKaty — modules/auto_forwarder/auto_forwarder.go
+// * @author        Fake Aaru <arclx724@gmail.com>
+// * @date          2026-Mar-22
+// * @projectName   RoboKatyBot
+// * Copyright ©SlayWithRose All rights reserved
 // Mirrors: misskaty/plugins/auto_forwarder.py
 
 package auto_forwarder

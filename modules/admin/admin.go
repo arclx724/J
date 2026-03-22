@@ -1,4 +1,7 @@
-// RoboKaty — modules/admin/admin.go
+// * @author        Fake Aaru <arclx724@gmail.com>
+// * @date          2026-Mar-22
+// * @projectName   RoboKatyBot
+// * Copyright ©SlayWithRose All rights reserved
 // Mirrors: admin.py + ban_user_or_chat.py — gotgbot v2 compatible
 
 package admin

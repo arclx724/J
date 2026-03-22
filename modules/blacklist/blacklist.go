@@ -1,4 +1,7 @@
-// RoboKaty — modules/blacklist/blacklist.go
+// * @author        Fake Aaru <arclx724@gmail.com>
+// * @date          2026-Mar-22
+// * @projectName   RoboKatyBot
+// * Copyright ©SlayWithRose All rights reserved
 
 package blacklist
 
