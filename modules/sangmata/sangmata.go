@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/sangmata/sangmata.go — Mirrors misskaty/plugins/sangmata.py
 // Tracks username/name history of users
 
 package sangmata

@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/anime/anime.go — Mirrors misskaty/plugins/anime.py
 
 package anime
 

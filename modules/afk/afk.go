@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/afk/afk.go — Mirrors misskaty/plugins/afk.py
 
 package afk
 

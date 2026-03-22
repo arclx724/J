@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/copy_forward/copy_forward.go — Mirrors misskaty/plugins/copy_forward.py
 
 package copy_forward
 

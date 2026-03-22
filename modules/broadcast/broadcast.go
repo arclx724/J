@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/broadcast/broadcast.go — Mirrors misskaty/plugins/broadcast.py
 
 package broadcast
 

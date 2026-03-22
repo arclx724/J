@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/json_plugin/json_plugin.go — Mirrors misskaty/plugins/json.py
 // View Telegram message structure as JSON
 
 package json_plugin

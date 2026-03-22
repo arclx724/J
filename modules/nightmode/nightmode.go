@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/nightmode/nightmode.go — Mirrors misskaty/plugins/nightmodev2.py
 
 package nightmode
 

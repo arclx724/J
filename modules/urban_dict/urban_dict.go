@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/urban_dict/urban_dict.go — Mirrors misskaty/plugins/urban_dict.py
 
 package urban_dict
 

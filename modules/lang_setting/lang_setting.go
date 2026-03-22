@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/lang_setting/lang_setting.go — Mirrors misskaty/plugins/lang_setting.py
 // Language selection for the bot (currently supports English only — extensible)
 
 package lang_setting

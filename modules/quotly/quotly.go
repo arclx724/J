@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/quotly/quotly.go — Mirrors misskaty/plugins/quotly.py
 // Generates quote stickers from messages
 
 package quotly

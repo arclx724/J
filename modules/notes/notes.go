@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/notes/notes.go — Mirrors misskaty/plugins/notes.py exactly
 // Commands: /save, /addnote, /notes, /delnote, /clear, /deleteall
 // Trigger:  #notename
 

@@ -1,5 +1,4 @@
 // RoboKaty - Rose-style Telegram Group Manager Bot
-// modules/autoapprove/autoapprove.go — Mirrors misskaty/plugins/auto_approve.py + autoapprove.py
 
 package autoapprove
 
