@@ -100,7 +100,7 @@ func listApproved(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	text := fmt.Sprintf("✅ <b>Approved users in %s:</b>\n\n", chat.Title)
 	for _, a := range approvals {
-		member, err := b.GetChatMember(chat.Id, a.UserID, nil)
+		member, err := b.GetChatMember(chat.Id, a.UserID)
 		name := fmt.Sprintf("User %d", a.UserID)
 		if err == nil {
 			u := member.GetUser()

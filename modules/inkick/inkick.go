@@ -72,7 +72,7 @@ func inkick(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	progress, _ := msg.Reply(b, "🚮 Cleaning members, please wait...", nil)
 
-	members, err := b.GetChatAdministrators(chat.Id, nil)
+	members, err := b.GetChatAdministrators(chat.Id)
 	if err != nil {
 		if progress != nil {
 			_, _, _ = progress.EditText(b, "❌ Couldn't fetch members.", nil)
@@ -119,7 +119,7 @@ func kickNoUsername(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	// Bot API limitation: can't iterate all members
 	// We can only handle admins
-	admins, err := b.GetChatAdministrators(chat.Id, nil)
+	admins, err := b.GetChatAdministrators(chat.Id)
 	if err != nil {
 		if progress != nil {
 			_, _, _ = progress.EditText(b, "❌ Couldn't fetch members.", nil)
@@ -167,7 +167,7 @@ func banGhosts(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	progress, _ := msg.Reply(b, "👻 Scanning for deleted accounts...", nil)
 
-	admins, err := b.GetChatAdministrators(chat.Id, nil)
+	admins, err := b.GetChatAdministrators(chat.Id)
 	if err != nil {
 		if progress != nil {
 			_, _, _ = progress.EditText(b, "❌ Couldn't fetch members.", nil)
@@ -216,7 +216,7 @@ func inStatus(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	botMember, err := b.GetChatMember(chat.Id, b.Id, nil)
+	botMember, err := b.GetChatMember(chat.Id, b.Id)
 	if err != nil || botMember.GetStatus() != "administrator" {
 		_, err = msg.Reply(b, "❌ I need to be an admin to run this command.", nil)
 		return err
@@ -224,7 +224,7 @@ func inStatus(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	progress, _ := msg.Reply(b, "📊 Gathering member information...", nil)
 
-	chatInfo, err := b.GetChat(chat.Id, nil)
+	chatInfo, err := b.GetChat(chat.Id)
 	if err != nil {
 		if progress != nil {
 			_, _, _ = progress.EditText(b, "❌ Couldn't fetch chat info.", nil)
@@ -233,7 +233,7 @@ func inStatus(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	// We can get admins count
-	admins, _ := b.GetChatAdministrators(chat.Id, nil)
+	admins, _ := b.GetChatAdministrators(chat.Id)
 	adminCount := len(admins)
 	deletedCount := 0
 	botCount := 0
@@ -310,7 +310,7 @@ func adminList(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	progress, _ := msg.Reply(b, fmt.Sprintf("Getting admin list in %s...", chat.Title), nil)
 
-	admins, err := b.GetChatAdministrators(chat.Id, nil)
+	admins, err := b.GetChatAdministrators(chat.Id)
 	if err != nil {
 		if progress != nil {
 			_, _, _ = progress.EditText(b, fmt.Sprintf("❌ Error: %s", err.Error()), nil)

@@ -154,7 +154,7 @@ func monitorAfk(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func checkMentionAfk(b *gotgbot.Bot, msg *gotgbot.Message, username string) {
-	chat, err := b.GetChat("@"+username, nil)
+	chat, err := b.GetChat("@"+username)
 	if err != nil {
 		return
 	}

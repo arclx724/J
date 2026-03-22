@@ -364,7 +364,7 @@ func banGhosts(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	progress, _ := msg.Reply(b, "👻 Scanning for deleted accounts...", nil)
-	members, err := b.GetChatAdministrators(chat.Id, nil)
+	members, err := b.GetChatAdministrators(chat.Id)
 	if err != nil {
 		_, err = msg.Reply(b, "❌ Couldn't fetch members.", nil)
 		return err
@@ -676,7 +676,7 @@ func promoteUser(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	botMember, err := b.GetChatMember(chat.Id, b.Id, nil)
+	botMember, err := b.GetChatMember(chat.Id, b.Id)
 	if err != nil {
 		_, err = msg.Reply(b, "❌ Couldn't get my own permissions.", nil)
 		return err
@@ -907,7 +907,7 @@ func mentionAll(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	members, err := b.GetChatAdministrators(chat.Id, nil)
+	members, err := b.GetChatAdministrators(chat.Id)
 	if err != nil {
 		_, err = msg.Reply(b, "❌ Couldn't fetch members.", nil)
 		return err
@@ -974,7 +974,7 @@ func reportUser(b *gotgbot.Bot, ctx *ext.Context) error {
 		targetName, utils.MentionHTML(reporter.Id(), reporter.Name()))
 
 	// Ping all admins invisibly
-	admins, _ := b.GetChatAdministrators(chat.Id, nil)
+	admins, _ := b.GetChatAdministrators(chat.Id)
 	for _, admin := range admins {
 		u := admin.GetUser()
 		if u.IsBot || u.IsDeleted {

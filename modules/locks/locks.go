@@ -116,7 +116,7 @@ func lockCmd(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	chatInfo, err := b.GetChat(chat.Id, nil)
+	chatInfo, err := b.GetChat(chat.Id)
 	if err != nil {
 		_, err = msg.Reply(b, "❌ Couldn't fetch chat info.", nil)
 		return err
@@ -146,7 +146,7 @@ func showLocks(b *gotgbot.Bot, ctx *ext.Context) error {
 	msg := ctx.EffectiveMessage
 	chat := ctx.EffectiveChat
 
-	chatInfo, err := b.GetChat(chat.Id, nil)
+	chatInfo, err := b.GetChat(chat.Id)
 	if err != nil {
 		_, err = msg.Reply(b, "❌ Couldn't fetch chat info.", nil)
 		return err
@@ -203,7 +203,7 @@ func urlDetector(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	// Check if URL lock is enabled (can_add_web_page_previews disabled)
-	chatInfo, err := b.GetChat(chat.Id, nil)
+	chatInfo, err := b.GetChat(chat.Id)
 	if err != nil {
 		return ext.ContinueGroups
 	}

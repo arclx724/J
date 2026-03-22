@@ -63,7 +63,7 @@ func karmaBoard(b *gotgbot.Bot, ctx *ext.Context) error {
 			medal = medals[i]
 		}
 		name := fmt.Sprintf("User %d", k.UserID)
-		if member, err := b.GetChatMember(chat.Id, k.UserID, nil); err == nil {
+		if member, err := b.GetChatMember(chat.Id, k.UserID); err == nil {
 			u := member.GetUser()
 			name = u.FirstName
 			if u.LastName != "" {

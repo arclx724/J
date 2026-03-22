@@ -1,12 +1,16 @@
-// RoboKaty — utils/helpers.go
-// All utility helpers: admin checks, user extraction, keyboard builder, command parser
+// * @author        Fake Aaru <arclx724@gmail.com>
+// * @date          2026-Mar-22
+// * @projectName   RoboKatyBot
+// * Copyright ©SlayWithRose All rights reserved
 
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -43,7 +47,8 @@ func GetAdminList(b *gotgbot.Bot, chatID int64) ([]int64, error) {
 		return entry.admins, nil
 	}
 
-	members, err := b.GetChatAdministrators(chatID, nil)
+	// rc.3: GetChatAdministrators takes only chatID (no opts)
+	members, err := b.GetChatAdministrators(chatID)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +75,8 @@ func IsAdmin(b *gotgbot.Bot, chatID, userID int64) bool {
 	if config.IsSudo(userID) {
 		return true
 	}
-	member, err := b.GetChatMember(chatID, userID, nil)
+	// rc.3: GetChatMember(chatID, userID) — no opts
+	member, err := b.GetChatMember(chatID, userID)
 	if err != nil {
 		return false
 	}
@@ -79,7 +85,7 @@ func IsAdmin(b *gotgbot.Bot, chatID, userID int64) bool {
 }
 
 func IsOwner(b *gotgbot.Bot, chatID, userID int64) bool {
-	member, err := b.GetChatMember(chatID, userID, nil)
+	member, err := b.GetChatMember(chatID, userID)
 	if err != nil {
 		return false
 	}
@@ -107,7 +113,7 @@ func HasPermission(b *gotgbot.Bot, chatID, userID int64, permission string) bool
 	if config.IsSudo(userID) {
 		return true
 	}
-	member, err := b.GetChatMember(chatID, userID, nil)
+	member, err := b.GetChatMember(chatID, userID)
 	if err != nil {
 		return false
 	}
@@ -132,7 +138,7 @@ func HasPermission(b *gotgbot.Bot, chatID, userID int64, permission string) bool
 	case "can_pin_messages":
 		return adm.CanPinMessages
 	case "can_manage_video_chats":
-		return adm.CanManageVideoChats
+		return adm.CanManageVoiceChats // rc.3 uses CanManageVoiceChats
 	case "can_manage_chat":
 		return adm.CanManageChat
 	case "can_post_messages":
@@ -144,6 +150,35 @@ func HasPermission(b *gotgbot.Bot, chatID, userID int64, permission string) bool
 }
 
 // ─── User Extraction ──────────────────────────────────────────────────────────
+
+// getChatByUsername fetches a chat by @username using raw HTTP (rc.3 compatible)
+func getChatByUsername(b *gotgbot.Bot, username string) (*gotgbot.User, error) {
+	apiURL := fmt.Sprintf("https://api.telegram.org/bot%s/getChat?chat_id=%s",
+		b.Token, url.QueryEscape(username))
+	resp, err := http.Get(apiURL)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, _ := io.ReadAll(resp.Body)
+
+	var result struct {
+		Ok     bool `json:"ok"`
+		Result struct {
+			Id        int64  `json:"id"`
+			FirstName string `json:"first_name"`
+			Username  string `json:"username"`
+		} `json:"result"`
+	}
+	if err := json.Unmarshal(body, &result); err != nil || !result.Ok {
+		return nil, fmt.Errorf("user %q not found", username)
+	}
+	return &gotgbot.User{
+		Id:        result.Result.Id,
+		FirstName: result.Result.FirstName,
+		Username:  result.Result.Username,
+	}, nil
+}
 
 func ExtractUser(b *gotgbot.Bot, ctx *ext.Context) (*gotgbot.User, error) {
 	msg := ctx.EffectiveMessage
@@ -157,7 +192,6 @@ func ExtractUser(b *gotgbot.Bot, ctx *ext.Context) (*gotgbot.User, error) {
 		return nil, fmt.Errorf("no user specified")
 	}
 
-	// text_mention entity
 	for _, e := range msg.Entities {
 		if e.Type == "text_mention" && e.User != nil {
 			return e.User, nil
@@ -166,18 +200,15 @@ func ExtractUser(b *gotgbot.Bot, ctx *ext.Context) (*gotgbot.User, error) {
 
 	target := args[1]
 	if strings.HasPrefix(target, "@") {
-		_, err := b.Request("getChat", map[string]interface{}{"chat_id": target}, nil, nil)
-		if err != nil {
-			return nil, fmt.Errorf("user %q not found", target)
-		}
-		return &gotgbot.User{FirstName: strings.TrimPrefix(target, "@"), Username: strings.TrimPrefix(target, "@")}, nil
+		return getChatByUsername(b, target)
 	}
 
 	uid, err := strconv.ParseInt(target, 10, 64)
 	if err != nil {
 		return nil, fmt.Errorf("invalid user identifier %q", target)
 	}
-	chat, err := b.GetChat(uid, nil)
+	// rc.3: GetChat(int64) — no opts
+	chat, err := b.GetChat(uid)
 	if err != nil {
 		return nil, fmt.Errorf("user id %d not found", uid)
 	}
@@ -201,7 +232,6 @@ func ExtractUserAndReason(b *gotgbot.Bot, ctx *ext.Context) (*gotgbot.User, stri
 		return nil, "", fmt.Errorf("no user specified")
 	}
 
-	// text_mention entity
 	for _, e := range msg.Entities {
 		if e.Type == "text_mention" && e.User != nil {
 			reason := ""
@@ -219,18 +249,18 @@ func ExtractUserAndReason(b *gotgbot.Bot, ctx *ext.Context) (*gotgbot.User, stri
 	}
 
 	if strings.HasPrefix(target, "@") {
-		_, err := b.Request("getChat", map[string]interface{}{"chat_id": target}, nil, nil)
+		user, err := getChatByUsername(b, target)
 		if err != nil {
-			return nil, "", fmt.Errorf("user %q not found", target)
+			return nil, "", err
 		}
-		return &gotgbot.User{FirstName: strings.TrimPrefix(target, "@"), Username: strings.TrimPrefix(target, "@")}, reason, nil
+		return user, reason, nil
 	}
 
 	uid, err := strconv.ParseInt(target, 10, 64)
 	if err != nil {
 		return nil, "", fmt.Errorf("invalid identifier %q", target)
 	}
-	chat, err := b.GetChat(uid, nil)
+	chat, err := b.GetChat(uid)
 	if err != nil {
 		return nil, "", fmt.Errorf("user id %d not found", uid)
 	}
@@ -287,7 +317,7 @@ func TwoBtn(t1, d1, t2, d2 string) *gotgbot.InlineKeyboardMarkup {
 	return IKB([][]gotgbot.InlineKeyboardButton{{Btn(t1, d1), Btn(t2, d2)}})
 }
 
-// ─── Command Parser (Multi-prefix: / . !) ─────────────────────────────────────
+// ─── Command Parser ───────────────────────────────────────────────────────────
 
 func CommandFilter(command string) func(*gotgbot.Message) bool {
 	return func(msg *gotgbot.Message) bool {
@@ -423,9 +453,9 @@ func FormatDuration(d time.Duration) string {
 
 // ─── HTTP Helper ──────────────────────────────────────────────────────────────
 
-func FetchJSON(url string) ([]byte, error) {
+func FetchJSON(apiURL string) ([]byte, error) {
 	client := &http.Client{Timeout: 15 * time.Second}
-	resp, err := client.Get(url)
+	resp, err := client.Get(apiURL)
 	if err != nil {
 		return nil, err
 	}

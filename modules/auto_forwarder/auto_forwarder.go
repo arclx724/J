@@ -45,7 +45,7 @@ func handleForward(b *gotgbot.Bot, ctx *ext.Context) error {
 	if !isSourceChat(msg.Chat.Id) {
 		return ext.ContinueGroups
 	}
-	if msg.ForwardOrigin != nil && !hasFilter("forwarded") {
+	if (msg.ForwardFrom != nil || msg.ForwardFromChat != nil) && !hasFilter("forwarded") {
 		return ext.ContinueGroups
 	}
 	msgType, fileName := getMsgType(msg)
